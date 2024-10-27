@@ -1,4 +1,4 @@
-const AuthContext = ({children}) => {
+const AuthProvider = ({children}) => {
     return (
         <div>
             {children}
@@ -6,4 +6,4 @@ const AuthContext = ({children}) => {
     )
 }
 
-export default AuthContext
+export default AuthProvider
