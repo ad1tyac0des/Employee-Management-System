@@ -1,21 +1,28 @@
 import Login from "./components/Auth/Login";
 import EmployeeDashboard from "./components/Dashboard/EmployeeDashboard/EmployeeDashboard"
 import AdminDashboard from "./components/Dashboard/AdminDashboard/AdminDashboard"
-import { useEffect } from "react";
-import { setLocalStorage, getLocalStorage } from "./utils/LocalStorage";
+import { useContext, useState } from "react";
+import { AuthContext } from "./context/AuthProvider";
 
 const App = () => {
+    const [user, setUser] = useState(null)
 
-    useEffect(() => {
-        setLocalStorage()
-        getLocalStorage()
-    }, [])
+    const authData = useContext(AuthContext)
+    // console.log(authData)
+
+    const handleLogin = (email, password) => {
+        if (authData && authData.admin.find((ad) => email===ad.email && password === ad.password)) {
+            setUser('admin')
+        } else if (authData && authData.employees.find((employee) => email === employee.email && password === employee.password)) {
+            setUser('employee')
+        } else {
+            alert('Invalid email or password')
+        }
+    }
 
     return (
         <div>
-            <Login />
-            {/* <EmployeeDashboard /> */}
-            {/* <AdminDashboard /> */}
+            {!user ? <Login handleLogin={handleLogin} /> : user === 'admin' ? <AdminDashboard /> : user === 'employee' ? <EmployeeDashboard /> : ''}
         </div>
     )
 }
